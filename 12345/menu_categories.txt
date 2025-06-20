@@ -1,0 +1,156 @@
+import React from "react";
+export default (props) => {
+	return (
+		<div className="flex flex-col bg-white">
+			<div className="self-stretch bg-white h-[1000px]">
+				<div className="self-stretch bg-white">
+					<div className="self-stretch">
+						<div className="flex items-center self-stretch bg-white py-4 pl-16 pr-4 gap-6">
+							<span className="flex-1 text-[#0F1614] text-lg font-bold text-center" >
+								{"Menu"}
+							</span>
+							<img
+								src={"https://i.imgur.com/1tMFzp8.png"} 
+								className="w-6 h-6 my-3 object-fill"
+							/>
+						</div>
+						<div className="flex flex-col self-stretch py-4 gap-3">
+							<div className="flex items-start self-stretch mx-4 gap-3">
+								<div className="flex flex-1 flex-col pb-3 gap-3">
+									<img
+										src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/63g3ldtm_expires_30_days.png"} 
+										className="self-stretch h-[173px] object-fill"
+									/>
+									<div className="flex flex-col items-start self-stretch">
+										<span className="text-[#0F1614] text-base font-bold mb-[1px]" >
+											{"Sushi"}
+										</span>
+										<span className="text-[#5E8C75] text-sm mb-[1px]" >
+											{"Fresh, expertly crafted sushi."}
+										</span>
+									</div>
+								</div>
+								<div className="flex flex-1 flex-col pb-[33px] gap-3">
+									<img
+										src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/cisa2f4l_expires_30_days.png"} 
+										className="self-stretch h-[173px] object-fill"
+									/>
+									<div className="flex flex-col items-start self-stretch">
+										<span className="text-[#0F1614] text-base font-bold mb-[1px]" >
+											{"Sashimi"}
+										</span>
+										<span className="text-[#5E8C75] text-sm mb-[1px]" >
+											{"Finely sliced raw fish."}
+										</span>
+									</div>
+								</div>
+							</div>
+							<div className="flex items-start self-stretch mx-4 gap-3">
+								<div className="flex flex-1 flex-col pb-3 gap-3">
+									<img
+										src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/0sys1ec8_expires_30_days.png"} 
+										className="self-stretch h-[173px] object-fill"
+									/>
+									<div className="flex flex-col items-start self-stretch">
+										<span className="text-[#0F1614] text-base font-bold mb-[1px]" >
+											{"Nigiri"}
+										</span>
+										<span className="text-[#5E8C75] text-sm mb-[1px]" >
+											{"Hand-pressed rice with fish."}
+										</span>
+									</div>
+								</div>
+								<div className="flex flex-1 flex-col pb-[33px] gap-3">
+									<img
+										src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/an7mv2rg_expires_30_days.png"} 
+										className="self-stretch h-[173px] object-fill"
+									/>
+									<div className="flex flex-col items-start self-stretch">
+										<span className="text-[#0F1614] text-base font-bold mb-[1px]" >
+											{"Rolls"}
+										</span>
+										<span className="text-[#5E8C75] text-sm mb-[1px]" >
+											{"Creative and classic rolls."}
+										</span>
+									</div>
+								</div>
+							</div>
+							<div className="flex items-start self-stretch mx-4 gap-3">
+								<div className="flex flex-1 flex-col pb-3 gap-3">
+									<img
+										src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/8jey5hzo_expires_30_days.png"} 
+										className="self-stretch h-[173px] object-fill"
+									/>
+									<div className="flex flex-col items-start self-stretch">
+										<span className="text-[#0F1614] text-base font-bold mb-[1px]" >
+											{"Appetizers"}
+										</span>
+										<span className="text-[#5E8C75] text-sm mb-[1px]" >
+											{"Delicious starters."}
+										</span>
+									</div>
+								</div>
+								<div className="flex flex-1 flex-col pb-3 gap-3">
+									<img
+										src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/9sg5b3wz_expires_30_days.png"} 
+										className="self-stretch h-[173px] object-fill"
+									/>
+									<div className="flex flex-col items-start self-stretch">
+										<span className="text-[#0F1614] text-base font-bold mb-[1px]" >
+											{"Desserts"}
+										</span>
+										<span className="text-[#5E8C75] text-sm mb-[1px]" >
+											{"Sweet treats to finish."}
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="self-stretch">
+						<div className="flex items-start self-stretch bg-white py-[9px] px-4">
+							<div className="flex flex-1 flex-col items-start py-1 mr-2">
+								<img
+									src={"https://i.imgur.com/1tMFzp8.png"} 
+									className="self-stretch h-6 mb-2 mx-[29px] object-fill"
+								/>
+								<span className="text-[#5E8C75] text-xs font-bold mb-[1px] mx-[23px]" >
+									{"Home"}
+								</span>
+							</div>
+							<div className="flex flex-1 flex-col items-start py-1 mr-[9px] rounded-[27px]">
+								<img
+									src={"https://i.imgur.com/1tMFzp8.png"} 
+									className="self-stretch h-6 mb-2 mx-[30px] object-fill"
+								/>
+								<span className="text-[#0F1614] text-xs font-bold mb-[1px] mx-[26px]" >
+									{"Menu"}
+								</span>
+							</div>
+							<div className="flex flex-1 flex-col items-start py-1 mr-2">
+								<img
+									src={"https://i.imgur.com/1tMFzp8.png"} 
+									className="self-stretch h-6 mb-2 mx-[29px] object-fill"
+								/>
+								<span className="text-[#5E8C75] text-xs font-bold mb-[1px] mx-6" >
+									{"Order"}
+								</span>
+							</div>
+							<div className="flex flex-1 flex-col items-start py-1">
+								<img
+									src={"https://i.imgur.com/1tMFzp8.png"} 
+									className="self-stretch h-6 mb-2 mx-[30px] object-fill"
+								/>
+								<span className="text-[#5E8C75] text-xs font-bold mb-[1px] mx-[23px]" >
+									{"Profile"}
+								</span>
+							</div>
+						</div>
+						<div className="self-stretch bg-white h-5">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	)
+}

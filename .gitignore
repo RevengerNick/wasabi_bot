@@ -1,0 +1,65 @@
+# === Global ===
+*.log
+*.tmp
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+.env
+.env.*
+
+# === Node ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+# === TypeScript ===
+*.tsbuildinfo
+
+# === Build artifacts ===
+dist/
+build/
+.out/
+.next/
+.esbuild/
+.cache/
+coverage/
+turbo/
+
+# === VSCode ===
+.vscode/
+
+# === Frontend ===
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env*
+frontend/*.log
+
+# === Backend ===
+backend/node_modules/
+backend/dist/
+backend/build/
+backend/.env*
+backend/*.log
+
+# === Public images / uploads (если ты не хочешь хранить их в git) ===
+**/public/**/*.jpg
+**/public/**/*.jpeg
+**/public/**/*.png
+**/public/**/*.gif
+**/public/**/*.svg
+**/public/uploads/**
+**/uploads/**
+
+# === IDEs ===
+.idea/
+*.iml
+*.sublime-workspace
+*.sublime-project
+
+# === OS junk ===
+*.DS_Store
+*.Thumbs.db

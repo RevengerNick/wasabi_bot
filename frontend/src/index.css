@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+
+@theme {
+  /* 
+    Мы определяем наши кастомные цвета как CSS-переменные.
+    Tailwind автоматически создаст для них классы: 
+    - для '--color-brand-dark' будут классы 'text-brand-dark', 'bg-brand-dark', 'border-brand-dark' и т.д.
+  */
+  --color-brand-dark: #0F1614;
+  --color-brand-green-light: #5E8C75;
+  --color-brand-green: #00A554;
+  --color-brand-gray: #EFF4F2;
+}

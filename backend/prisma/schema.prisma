@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // или "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  telegram_id  BigInt   @unique // Используем BigInt для ID телеграма
+  phone_number String?  @unique
+  first_name   String?
+  username     String?
+  created_at   DateTime @default(now())
+
+  orders Order[]
+}
+
+model Category {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  order_index Int    @default(0)
+
+  products Product[]
+}
+
+model Product {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  price       Float
+  image_url   String?
+
+  category_id Int
+  category    Category @relation(fields: [category_id], references: [id])
+
+  orderItems OrderItem[]
+}
+
+model Order {
+  id      Int  @id @default(autoincrement())
+  user_id Int
+  user    User @relation(fields: [user_id], references: [id])
+
+  status      String @default("new") // new, confirmed, in_delivery, completed, canceled
+  total_price Float
+  final_price Float // Цена после применения скидки
+
+  delivery_address String?
+  contact_phone    String
+
+  created_at DateTime @default(now())
+
+  promocode_used String?
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id       Int   @id @default(autoincrement())
+  order_id Int
+  order    Order @relation(fields: [order_id], references: [id])
+
+  product_id Int
+  product    Product @relation(fields: [product_id], references: [id])
+
+  quantity       Int
+  price_at_order Float // Цена товара на момент заказа
+}
+
+model Promocode {
+  id               Int       @id @default(autoincrement())
+  code             String    @unique
+  discount_percent Float
+  is_active        Boolean   @default(true)
+  expires_at       DateTime?
+}

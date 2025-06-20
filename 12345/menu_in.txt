@@ -1,0 +1,181 @@
+import React from "react";
+export default (props) => {
+	return (
+		<div className="flex flex-col bg-white">
+			<div className="self-stretch bg-white h-[993px]">
+				<div className="self-stretch bg-white">
+					<div className="flex flex-col items-start self-stretch">
+						<div className="flex items-center self-stretch bg-white p-4 gap-6">
+							<img
+								src={"https://i.imgur.com/1tMFzp8.png"} 
+								className="w-6 h-6 my-3 object-fill"
+							/>
+							<span className="text-[#0F1614] text-lg font-bold" >
+								{"Menu"}
+							</span>
+						</div>
+						<div className="flex justify-between items-start self-stretch pb-3 pl-4 pr-[84px]">
+							<span className="text-[#5E8C75] text-sm font-bold mt-4 mb-[17px]" >
+								{"Popular"}
+							</span>
+							<span className="text-[#0F1614] text-sm font-bold mt-4 mb-[17px]" >
+								{"Sushi"}
+							</span>
+							<span className="text-[#5E8C75] text-sm font-bold mt-4 mb-[17px]" >
+								{"Drinks"}
+							</span>
+							<span className="text-[#5E8C75] text-sm font-bold mt-4 mb-[17px]" >
+								{"Desserts"}
+							</span>
+						</div>
+						<span className="text-[#0F1614] text-[22px] font-bold my-5 ml-4" >
+							{"Sushi"}
+						</span>
+						<div className="flex items-start self-stretch p-4">
+							<div className="flex flex-1 flex-col items-start gap-4">
+								<div className="flex flex-col items-start self-stretch">
+									<span className="text-[#5E8C75] text-sm mb-[5px]" >
+										{"4.8 • 25+ ratings"}
+									</span>
+									<span className="text-[#0F1614] text-base font-bold mb-[5px]" >
+										{"Salmon Nigiri"}
+									</span>
+									<span className="text-[#5E8C75] text-sm mb-[1px]" >
+										{"Fresh salmon on a bed of perfectly seasoned rice."}
+									</span>
+								</div>
+								<button className="flex flex-col items-start bg-[#EFF4F2] text-left py-[5px] px-5 rounded-lg border-0"
+									onClick={()=>alert("Pressed!")}>
+									<span className="text-[#0F1614] text-sm font-bold" >
+										{"$12.99"}
+									</span>
+								</button>
+							</div>
+							<img
+								src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/re7sphzc_expires_30_days.png"} 
+								className="w-[130px] h-[139px] rounded-lg object-fill"
+							/>
+						</div>
+						<div className="flex items-start self-stretch p-4">
+							<div className="flex flex-1 flex-col items-start gap-4">
+								<div className="flex flex-col items-start self-stretch">
+									<span className="text-[#5E8C75] text-sm mb-[5px]" >
+										{"4.7 • 20+ ratings"}
+									</span>
+									<span className="text-[#0F1614] text-base font-bold mb-[5px]" >
+										{"Tuna Nigiri"}
+									</span>
+									<span className="text-[#5E8C75] text-sm mb-[1px]" >
+										{"High-quality tuna atop a bed of seasoned rice."}
+									</span>
+								</div>
+								<button className="flex flex-col items-start bg-[#EFF4F2] text-left py-[5px] px-[19px] rounded-lg border-0"
+									onClick={()=>alert("Pressed!")}>
+									<span className="text-[#0F1614] text-sm font-bold" >
+										{"$13.99"}
+									</span>
+								</button>
+							</div>
+							<img
+								src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/oj2x1uc4_expires_30_days.png"} 
+								className="w-[130px] h-[139px] rounded-lg object-fill"
+							/>
+						</div>
+						<div className="flex items-start self-stretch p-4">
+							<div className="flex flex-1 flex-col items-start gap-4">
+								<div className="flex flex-col items-start self-stretch">
+									<span className="text-[#5E8C75] text-sm mb-[5px]" >
+										{"4.9 • 30+ ratings"}
+									</span>
+									<span className="text-[#0F1614] text-base font-bold mb-[5px]" >
+										{"California Roll"}
+									</span>
+									<span className="text-[#5E8C75] text-sm mb-[1px]" >
+										{"Crab, avocado, and cucumber rolled in seaweed and rice."}
+									</span>
+								</div>
+								<button className="flex flex-col items-start bg-[#EFF4F2] text-left py-[5px] px-[19px] rounded-lg border-0"
+									onClick={()=>alert("Pressed!")}>
+									<span className="text-[#0F1614] text-sm font-bold" >
+										{"$10.99"}
+									</span>
+								</button>
+							</div>
+							<img
+								src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/hnuof2pz_expires_30_days.png"} 
+								className="w-[130px] h-[139px] rounded-lg object-fill"
+							/>
+						</div>
+						<div className="flex items-start self-stretch p-4">
+							<div className="flex flex-1 flex-col items-start gap-4">
+								<div className="flex flex-col items-start self-stretch">
+									<span className="text-[#5E8C75] text-sm mb-[5px]" >
+										{"4.6 • 15+ ratings"}
+									</span>
+									<span className="text-[#0F1614] text-base font-bold mb-[5px]" >
+										{"Spicy Tuna Roll"}
+									</span>
+									<span className="text-[#5E8C75] text-sm mb-[1px]" >
+										{"Tuna mixed with spicy mayo, rolled in seaweed and rice."}
+									</span>
+								</div>
+								<button className="flex flex-col items-start bg-[#EFF4F2] text-left py-[5px] px-[21px] rounded-lg border-0"
+									onClick={()=>alert("Pressed!")}>
+									<span className="text-[#0F1614] text-sm font-bold" >
+										{"$11.99"}
+									</span>
+								</button>
+							</div>
+							<img
+								src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/qb52x5st_expires_30_days.png"} 
+								className="w-[130px] h-[139px] rounded-lg object-fill"
+							/>
+						</div>
+					</div>
+					<div className="self-stretch">
+						<div className="flex items-start self-stretch bg-white py-[9px] px-4">
+							<div className="flex flex-1 flex-col items-start py-1 mr-2">
+								<img
+									src={"https://i.imgur.com/1tMFzp8.png"} 
+									className="self-stretch h-6 mb-2 mx-[29px] object-fill"
+								/>
+								<span className="text-[#5E8C75] text-xs font-bold mb-[1px] mx-[23px]" >
+									{"Home"}
+								</span>
+							</div>
+							<div className="flex flex-1 flex-col items-start py-1 mr-[9px] rounded-[27px]">
+								<img
+									src={"https://i.imgur.com/1tMFzp8.png"} 
+									className="self-stretch h-6 mb-2 mx-[30px] object-fill"
+								/>
+								<span className="text-[#0F1614] text-xs font-bold mb-[1px] mx-[26px]" >
+									{"Menu"}
+								</span>
+							</div>
+							<div className="flex flex-1 flex-col items-start py-1 mr-2">
+								<img
+									src={"https://i.imgur.com/1tMFzp8.png"} 
+									className="self-stretch h-6 mb-2 mx-[29px] object-fill"
+								/>
+								<span className="text-[#5E8C75] text-xs font-bold mb-[1px] mx-[21px]" >
+									{"Orders"}
+								</span>
+							</div>
+							<div className="flex flex-1 flex-col items-start py-1">
+								<img
+									src={"https://i.imgur.com/1tMFzp8.png"} 
+									className="self-stretch h-6 mb-2 mx-[30px] object-fill"
+								/>
+								<span className="text-[#5E8C75] text-xs font-bold mb-[1px] mx-[17px]" >
+									{"Account"}
+								</span>
+							</div>
+						</div>
+						<div className="self-stretch bg-white h-5">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	)
+}
