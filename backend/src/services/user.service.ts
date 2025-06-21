@@ -31,11 +31,9 @@ export const findUserByPhone = async (phoneNumber: string): Promise<User | null>
  * Создает нового пользователя на основе номера телефона.
  */
 export const createUserByPhone = async (phoneNumber: string): Promise<User> => {
-    const pseudoTelegramId = BigInt(Date.now());
     return prisma.user.create({
         data: {
             phone_number: phoneNumber,
-            telegram_id: pseudoTelegramId,
             first_name: `User ${phoneNumber.slice(-4)}`
         }
     });
@@ -45,14 +43,14 @@ export const createUserByPhone = async (phoneNumber: string): Promise<User> => {
  * --- ВОТ НЕДОСТАЮЩАЯ ФУНКЦИЯ ---
  * Обновляет номер телефона для существующего пользователя по его ID.
  */
-export const updateUserPhone = async (userId: number, phoneNumber: string): Promise<User> => {
+export const updateUserPhone = async (userId: string, phoneNumber: string): Promise<User> => {
     return prisma.user.update({
         where: { id: userId },
         data: { phone_number: phoneNumber },
     });
 };
 
-export const deleteUserById = async (userId: number): Promise<User> => {
+export const deleteUserById = async (userId: string): Promise<User> => {
     return prisma.user.delete({
         where: { id: userId },
     });

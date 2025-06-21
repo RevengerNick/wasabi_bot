@@ -2,7 +2,25 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import * as userService from '../services/user.service';
 import { validateTelegramData } from '../utils/telegramValidator';
+import { User } from '@prisma/client'; // Импортируем тип User
 
+// --- НОВАЯ УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ---
+const generateTokenAndRespond = (res: Response, user: User) => {
+    // 1. Создаем объект с полезной нагрузкой для токена
+    const payload: any = {
+        id: user.id, // ID обязателен
+    };
+    // 2. Добавляем поля, только если они существуют
+    if (user.telegram_id) payload.telegram_id = user.telegram_id.toString();
+    if (user.phone_number) payload.phone_number = user.phone_number;
+    if (user.first_name) payload.first_name = user.first_name;
+
+    // 3. Подписываем токен
+    const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '7d' });
+    
+    // 4. Отправляем ответ
+    res.status(200).json({ token });
+};
 // Переименовываем для ясности
 export const loginWithTelegram = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -17,9 +35,7 @@ export const loginWithTelegram = async (req: Request, res: Response, next: NextF
             return;
         }
         const userInDb = await userService.findOrCreateUserByTelegram(telegramUser);
-        const tokenPayload = { id: userInDb.id, telegram_id: userInDb.telegram_id.toString() };
-        const token = jwt.sign(tokenPayload, process.env.JWT_SECRET!, { expiresIn: '7d' });
-        res.status(200).json({ token });
+        generateTokenAndRespond(res, userInDb);
     } catch (error) {
         next(error);
     }
@@ -38,15 +54,10 @@ export const loginWithPhone = async (req: Request, res: Response, next: NextFunc
         }
 
         let user = await userService.findUserByPhone(phoneNumber);
-        
-        // --- ИСПРАВЛЕНО: Логика вынесена в сервис ---
         if (!user) {
             user = await userService.createUserByPhone(phoneNumber);
         }
-
-        const tokenPayload = { id: user.id, telegram_id: user.telegram_id.toString() };
-        const token = jwt.sign(tokenPayload, process.env.JWT_SECRET!, { expiresIn: '7d' });
-        res.status(200).json({ token });
+        generateTokenAndRespond(res, user);
     } catch (error) {
         next(error);
     }

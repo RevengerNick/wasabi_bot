@@ -2,7 +2,8 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useUserStore } from '../store/userStore';
-import type { Category, Product, User } from '../types';
+import type { Category, Product, User} from '../types';
+
 
 export const baseURL = 'https://revengernick.duckdns.org/api'; // <-- ЭКСПОРТИРУЕМ ЭТУ КОНСТАНТУ
 
@@ -11,9 +12,29 @@ const apiClient = axios.create({ baseURL: `${baseURL}` });
 
 apiClient.interceptors.request.use((config) => {
     const token = useUserStore.getState().token;
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
 });
+
+apiClient.interceptors.response.use(
+  // Если ответ успешный (статус 2xx), просто возвращаем его
+  (response) => response,
+  // Если ответ с ошибкой
+  (error) => {
+    // Проверяем, что ошибка связана с ответом от сервера и статус код - 401
+    if (error.response && error.response.status === 401) {
+      console.log("Получена ошибка 401. Токен невалиден. Выполняем выход...");
+      // Вызываем нашу функцию logout, которая очистит все данные
+      useUserStore.getState().logout();
+      // Можно также перезагрузить страницу для полной уверенности
+      window.location.href = '/'; 
+    }
+    // Пробрасываем ошибку дальше, чтобы ее можно было обработать в компоненте (например, показать toast)
+    return Promise.reject(error);
+  }
+);
 
 export const loginViaTelegram = async (initData: string) => {
     const response = await apiClient.post('/auth/telegram-login', { initData });
@@ -73,5 +94,24 @@ export const deleteMe = async () => {
     return apiClient.delete('/users/delete-me');
 };
 
+export const getCart = async () => {
+    const response = await apiClient.get('/cart');
+    return response.data;
+};
+
+export const updateCart = async (productId: number, quantity: number) => {
+    const response = await apiClient.post('/cart', { productId, quantity });
+    return response.data;
+};
+
+export const createOrder = async (details: { address: string; contactPhone: string }) => {
+    const response = await apiClient.post('/orders', details);
+    return response.data;
+};
+
+export const getOrderHistory = async () => {
+    const response = await apiClient.get('/orders/history');
+    return response.data;
+};
 // TODO: Добавить функцию для аутентификации
 // export const loginUser = async (initData: string) => { ... }

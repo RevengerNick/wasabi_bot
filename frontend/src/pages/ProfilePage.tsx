@@ -1,9 +1,10 @@
 import React from 'react';
-import { FiCreditCard, FiMapPin, FiBell, FiLogOut, FiTrash2 } from 'react-icons/fi';
+import { FiCreditCard, FiMapPin, FiBell, FiLogOut, FiTrash2, FiList } from 'react-icons/fi';
 import Header from '../components/Header';
 import ProfileMenuItem from '../components/ProfileMenuItem';
 import { useUserStore } from '../store/userStore';
 import * as api from '../services/api';
+import { Link } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => {
     // Получаем пользователя и функцию выхода из нашего глобального хранилища
@@ -46,25 +47,32 @@ const ProfilePage: React.FC = () => {
         { icon: FiMapPin, label: 'Адреса' },
         { icon: FiBell, label: 'Уведомления' },
     ];
+    
+     const displayId = user.telegram_id 
+        ? `Telegram ID: ${user.telegram_id}` 
+        : `Client ID: ${user.id.substring(0, 8).toUpperCase()}`;
 
-    return (
+     return (
         <div className="bg-white min-h-screen">
             <Header title="Профиль" />
-            
-            {/* Секция с информацией о пользователе */}
-            <div className="flex flex-col items-center p-4 border-b border-gray-100">
+            <div className="flex flex-col items-center p-4 border-b">
                 <img 
-                    src={`https://api.dicebear.com/7.x/pixel-art/svg?seed=${user.telegram_id}`} 
-                    className="w-24 h-24 rounded-full object-cover mb-4 bg-gray-200" 
+                    src={`https://api.dicebear.com/7.x/pixel-art/svg?seed=${user.id}`} // Аватарку генерируем по неизменному UUID
+                    className="w-24 h-24 rounded-full" 
                     alt="User avatar" 
                 />
-                <h2 className="text-brand-dark text-2xl font-bold">{user.first_name || 'Пользователь'}</h2>
-                <p className="text-brand-green-light">{user.phone_number || 'Номер не указан'}</p>
-                <p className="text-xs text-gray-400 mt-1">Telegram ID: {user.telegram_id}</p>
+                <h2 className="text-2xl font-bold mt-4">{user.first_name || 'Пользователь'}</h2>
+                <p className="text-gray-600">{user.phone_number || 'Номер не указан'}</p>
+                {/* Отображаем наш новый, безопасный ID */}
+                <p className="text-xs text-gray-400 mt-2">{displayId}</p>
             </div>
             
             <div className="px-4 mt-4">
+                
                 <h3 className="text-lg font-bold text-brand-dark mb-2">Аккаунт</h3>
+                <Link to="/orders">
+    <ProfileMenuItem icon={FiList} label="История заказов" />
+</Link>
                 {accountItems.map(item => <ProfileMenuItem key={item.label} icon={item.icon} label={item.label} />)}
                 
                 {/* Секция "Опасная зона" */}

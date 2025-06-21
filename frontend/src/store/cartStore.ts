@@ -1,52 +1,97 @@
-// src/store/cartStore.ts
+// frontend/src/store/cartStore.ts
 import { create } from 'zustand';
-import type { Product } from '../types';
+import type { CartItem, Product } from '../types';
+import * as api from '../services/api';
+import { debounce } from 'lodash'; // Используем готовую надежную реализацию
 
-// Описываем, как будет выглядеть товар в корзине
-export interface CartItem extends Product {
-  quantity: number;
-}
 
-// Описываем состояние и действия
 interface CartState {
   items: CartItem[];
-  addItem: (product: Product) => void;
+  // Действия, которые обновляют UI мгновенно
+  optimistic_addItem: (product: Product) => void;
+  optimistic_decreaseQuantity: (productId: number) => void;
+  // Действие для синхронизации с БД
   removeItem: (productId: number) => void;
-  decreaseQuantity: (productId: number) => void;
+  syncWithDB: () => Promise<void>;
+  clearCart: () => void;
 }
 
-export const useCartStore = create<CartState>((set) => ({
+// Создаем debounced-функцию для отправки обновлений на сервер
+// Она будет ждать 1 секунду после последнего вызова перед отправкой
+const debouncedUpdateCart = debounce(async (productId: number, quantity: number) => {
+  try {
+    await api.updateCart(productId, quantity);
+  } catch (error) {
+    console.error("Не удалось синхронизировать корзину:", error);
+    // Здесь можно добавить логику отката или показа ошибки пользователю
+  }
+}, 1000);
+
+
+export const useCartStore = create<CartState>((set, get) => ({
   items: [],
   
-  addItem: (product) => set((state) => {
-    const existingItem = state.items.find(item => item.id === product.id);
-    if (existingItem) {
-      // Если товар уже есть, увеличиваем его количество
-      const updatedItems = state.items.map(item =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      return { items: updatedItems };
-    } else {
-      // Если товара нет, добавляем его с количеством 1
-      return { items: [...state.items, { ...product, quantity: 1 }] };
-    }
-  }),
-  
-  decreaseQuantity: (productId) => set((state) => {
-    const existingItem = state.items.find(item => item.id === productId);
-    if (existingItem && existingItem.quantity > 1) {
-      // Если товара больше одного, уменьшаем количество
-      const updatedItems = state.items.map(item =>
-        item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
-      );
-      return { items: updatedItems };
-    } else {
-      // Если товар один или его нет, полностью удаляем его из корзины
-      return { items: state.items.filter(item => item.id !== productId) };
-    }
-  }),
+  optimistic_addItem: (product) => {
+    const existingItem = get().items.find(item => item.id === product.id);
+    let newQuantity = 1;
 
-  removeItem: (productId) => set((state) => ({
-    items: state.items.filter(item => item.id !== productId),
-  })),
+    if (existingItem) {
+      newQuantity = existingItem.quantity + 1;
+      const updatedItems = get().items.map(item =>
+        item.id === product.id ? { ...item, quantity: newQuantity } : item
+      );
+      set({ items: updatedItems });
+    } else {
+      set({ items: [...get().items, { ...product, quantity: 1 }] });
+    }
+    // Отправляем изменения на бэкенд с задержкой
+    debouncedUpdateCart(product.id, newQuantity);
+  },
+
+  optimistic_decreaseQuantity: (productId) => {
+    const existingItem = get().items.find(item => item.id === productId);
+    if (!existingItem) return;
+
+    let newQuantity = existingItem.quantity - 1;
+
+    if (newQuantity > 0) {
+        const updatedItems = get().items.map(item =>
+            item.id === productId ? { ...item, quantity: newQuantity } : item
+        );
+        set({ items: updatedItems });
+    } else {
+        set({ items: get().items.filter(item => item.id !== productId) });
+    }
+    // Отправляем изменения на бэкенд с задержкой
+    debouncedUpdateCart(productId, newQuantity);
+  },
+
+  removeItem: (productId) => {
+    // 1. Оптимистично удаляем из UI
+    set((state) => ({ items: state.items.filter(item => item.id !== productId) }));
+    // 2. Отправляем на бэкенд команду удалить товар (отправив количество 0)
+    debouncedUpdateCart(productId, 0);
+  },
+  
+  syncWithDB: async () => {
+    try {
+        const serverCart = await api.getCart();
+        if (serverCart && serverCart.items) {
+          
+            const clientItems = serverCart.items.map((item: any) => ({
+                ...item.product,
+                quantity: item.quantity,
+            }));
+            set({ items: clientItems });
+        }
+    } catch (error) {
+        console.error("Ошибка при загрузке корзины с сервера:", error);
+    }
+  },
+
+
+  clearCart: () => {
+    // TODO: Очищать корзину и на сервере
+    set({ items: [] });
+  },
 }));

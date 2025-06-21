@@ -14,8 +14,10 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  telegram_id  BigInt   @unique // Используем BigInt для ID телеграма
+  // Меняем Int на String, @id на @default(uuid())
+  id String @id @default(uuid())
+
+  telegram_id  BigInt?  @unique
   phone_number String?  @unique
   first_name   String?
   username     String?
@@ -46,9 +48,10 @@ model Product {
 }
 
 model Order {
-  id      Int  @id @default(autoincrement())
-  user_id Int
-  user    User @relation(fields: [user_id], references: [id])
+  id        Int    @id @default(autoincrement())
+  public_id String @unique @default(cuid())
+  user_id   String
+  user      User   @relation(fields: [user_id], references: [id])
 
   status      String @default("new") // new, confirmed, in_delivery, completed, canceled
   total_price Float
@@ -74,6 +77,8 @@ model OrderItem {
 
   quantity       Int
   price_at_order Float // Цена товара на момент заказа
+
+  @@unique([order_id, product_id])
 }
 
 model Promocode {
