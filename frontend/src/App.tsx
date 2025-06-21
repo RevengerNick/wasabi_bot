@@ -8,7 +8,7 @@ import { useScreenSize } from './hooks/useScreenSize';
 import DesktopLayout from './layouts/DesktopLayout';
 import MobileLayout from './layouts/MobileLayout';
 import SharedRoutes from './routes/SharedRoutes';
-//import LoginPage from './pages/LoginPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
     const { token } = useUserStore();
@@ -59,9 +59,13 @@ function App() {
 
     // Если после всех попыток токена все еще нет, показываем страницу логина.
     // Это сработает и в браузере, и если в Telegram что-то пошло не так.
-    //if (!token) {
-     //   return <LoginPage />;
-    //}
+    if (!token) {
+        console.log("start")
+        api.sayToServer(`Start`)
+        api.sayToServer(`${WebApp.initData} webapp_data`)
+        api.sayToServer(`${window.Telegram?.WebApp?.initData} webapp_data`)
+        return <LoginPage />;
+    }
 
     // Если пользователь вошел, показываем основное приложение
     return (
