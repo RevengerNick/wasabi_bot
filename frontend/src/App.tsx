@@ -9,11 +9,26 @@ import DesktopLayout from './layouts/DesktopLayout';
 import MobileLayout from './layouts/MobileLayout';
 import SharedRoutes from './routes/SharedRoutes';
 import LoginPage from './pages/LoginPage';
+import { retrieveLaunchParams } from '@telegram-apps/sdk';
 
 function App() {
     const { token } = useUserStore();
     const { isDesktop } = useScreenSize();
     const [isInitialized, setIsInitialized] = useState(false);
+    const { initDataRaw, initData } = retrieveLaunchParams();
+
+    useEffect(() => {
+        console.log("hello")
+        console.log(initData)
+        api.sayToServer("try to send initdataraw")
+        api.sayToServer(typeof initDataRaw === 'string' ? initDataRaw : String(initDataRaw));
+    if (window.Telegram?.WebApp?.initData != "") {
+        api.sayToServer(`Start with data`)
+        api.sayToServer(window.Telegram?.WebApp?.initData);
+    } else {
+        api.sayToServer(`noooo`)
+    }
+  }, []);
 
     useEffect(() => {
         console.log("start")
