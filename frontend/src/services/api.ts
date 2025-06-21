@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useUserStore } from '../store/userStore';
 import type { Category, Product, User } from '../types';
 
-export const baseURL = '/api'; // <-- ЭКСПОРТИРУЕМ ЭТУ КОНСТАНТУ
+export const baseURL = 'https://revengernick.duckdns.org/api'; // <-- ЭКСПОРТИРУЕМ ЭТУ КОНСТАНТУ
 
 const apiClient = axios.create({ baseURL: `${baseURL}` });
 // --- Функции для работы с API ---
