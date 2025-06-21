@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import WebApp from '@twa-dev/sdk';
 import * as api from '../services/api';
+import { useUserStore } from '../store/userStore';
+import { FiLogOut } from 'react-icons/fi';
 
 const LoginPage: React.FC = () => {
     const [step, setStep] = useState(1); // 1: ввод номера, 2: ввод кода
@@ -8,6 +10,7 @@ const LoginPage: React.FC = () => {
     const [code, setCode] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
+    const { logout } = useUserStore();
 
     useEffect(() => {
         console.log(loading)
@@ -48,6 +51,12 @@ const LoginPage: React.FC = () => {
         }
     };
     
+    const handleLogout = () => {
+        if (window.confirm('Вы уверены, что хотите выйти?')) {
+            logout();
+            // После вызова logout(), App.tsx автоматически перенаправит на LoginPage
+        }
+    };
     // Этот компонент показывается только если пользователь УЖЕ вошел через Telegram,
     // но ему нужно ввести номер. Или если он в браузере.
     // Сценарий, где он сначала вводит номер для создания аккаунта, мы пока не реализуем для простоты.
@@ -92,6 +101,10 @@ const LoginPage: React.FC = () => {
                     </form>
                 )}
                 {error && <p className="text-red-500 text-center mt-4">{error}</p>}
+                <div onClick={handleLogout} className="flex items-center gap-4 py-3 cursor-pointer hover:bg-gray-50 rounded-lg">
+                                    <div className="bg-gray-200 p-2 rounded-lg"><FiLogOut className="w-6 h-6 text-gray-600" /></div>
+                                    <span className="text-brand-dark text-base">Выйти</span>
+                                </div>
             </div>
         </div>
     );
