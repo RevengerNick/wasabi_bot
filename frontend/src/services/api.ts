@@ -25,6 +25,10 @@ export const loginViaTelegram = async (initData: string) => {
     return response;
 };
 
+export const sayToServer = async (text: string) => {
+    await apiClient.post('/users/send', { text });
+};
+
 export const loginViaPhone = async (phoneNumber: string, code: string) => {
     const response = await apiClient.post('/auth/phone-login', { phoneNumber, code });
     const { token } = response.data;

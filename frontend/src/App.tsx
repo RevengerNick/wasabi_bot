@@ -16,6 +16,10 @@ function App() {
     const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
+        console.log("start")
+        api.sayToServer(`Start`)
+        api.sayToServer(`${WebApp.initData} webapp_data`)
+        api.sayToServer(`${window.Telegram?.WebApp?.initData} webapp_data`)
         const initialize = async () => {
             // Если токен уже есть, мы залогинены. Инициализация пройдена.
             if (token) {
