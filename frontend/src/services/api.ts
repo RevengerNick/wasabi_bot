@@ -5,7 +5,7 @@ import { useUserStore } from '../store/userStore';
 import type { Category, Product, User} from '../types';
 
 
-export const baseURL = 'https://revengernick.duckdns.org/api'; // <-- ЭКСПОРТИРУЕМ ЭТУ КОНСТАНТУ
+export const baseURL = 'https://e8fc-92-119-248-95.ngrok-free.app'; // <-- ЭКСПОРТИРУЕМ ЭТУ КОНСТАНТУ
 
 const apiClient = axios.create({ baseURL: `${baseURL}` });
 // --- Функции для работы с API ---

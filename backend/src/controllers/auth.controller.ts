@@ -25,6 +25,7 @@ const generateTokenAndRespond = (res: Response, user: User) => {
 export const loginWithTelegram = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { initData } = req.body;
+        console.log(initData)
         if (!initData) {
             res.status(400).json({ message: 'initData не предоставлены' });
             return;
@@ -37,6 +38,7 @@ export const loginWithTelegram = async (req: Request, res: Response, next: NextF
         const userInDb = await userService.findOrCreateUserByTelegram(telegramUser);
         generateTokenAndRespond(res, userInDb);
     } catch (error) {
+        console.log(error)
         next(error);
     }
 };
