@@ -32,9 +32,7 @@ const ProductListPage: React.FC = () => {
     return (
         <div className="flex flex-col bg-white min-h-screen">
             <Header title="Меню" showBackButton={true} />
-            <div className="p-4">
-                <h2 className="text-brand-dark text-2xl font-bold mb-4">Продукты</h2>
-                
+            <div className="p-4">                
                 {loading && <p className="text-center text-gray-500 py-10">Загрузка товаров...</p>}
                 {error && <p className="text-center text-red-500 py-10">{error}</p>}
 

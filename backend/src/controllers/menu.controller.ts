@@ -24,3 +24,19 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
         next(error);
     }
 };
+
+export const search = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const query = req.query.q as string; // Получаем поисковый запрос из ?q=...
+
+        if (!query) {
+            res.status(400).json({ message: 'Поисковый запрос не может быть пустым' });
+            return
+        }
+
+        const results = await menuService.searchProducts(query);
+        res.status(200).json(results);
+    } catch (error) {
+        next(error);
+    }
+};

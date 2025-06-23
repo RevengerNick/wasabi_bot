@@ -53,9 +53,12 @@ const MenuPage: React.FC = () => {
 
   return (
     <div className="flex flex-col bg-white min-h-screen">
-      <div className="flex items-center self-stretch bg-white py-4 px-4 gap-6 sticky top-0 z-10 border-b rounded-2xl">
+      <div className="flex items-center self-stretch bg-white py-3 px-4 gap-6 sticky top-0 z-10 border-b rounded-2xl">
+        <div className='size-8'></div>
         <h1 className="flex-1 text-gray-800 text-lg font-bold text-center">Меню</h1>
-        <FiSearch className="w-6 h-6 text-gray-800" />
+        <Link to={'/search'} className=' rounded-2xl p-2 hover:bg-gray-200 transition-all duration-200'>
+          <FiSearch  className="w-6 h-6 text-gray-800" />
+        </Link>
       </div>
 
       <div className="flex flex-col self-stretch p-4 gap-4">

@@ -37,7 +37,7 @@ const handleCheckout = () => {
                         <p className="text-gray-500 mt-2">Самое время добавить что-нибудь вкусное!</p>
                         <button 
                             onClick={() => navigate('/menu')}
-                            className="mt-6 bg-brand-green text-white font-bold py-3 px-6 rounded-lg"
+                            className="mt-6 bg-brand-green text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-all duration-200"
                         >
                             Перейти в меню
                         </button>

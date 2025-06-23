@@ -1,61 +1,66 @@
-// src/pages/HomePage.tsx
-import React, { useState, useEffect } from 'react';
+// frontend/src/pages/HomePage.tsx
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiSearch } from 'react-icons/fi';
 import ProductCard from '../components/ProductCard';
 import type { Product } from '../types';
 import * as api from '../services/api';
 
 const HomePage: React.FC = () => {
-    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
-    
-    // TODO: В будущем эти данные должны приходить со специальных эндпоинтов /api/featured и /api/popular
-    const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-    
+    const [popularItems, setPopularItems] = useState<Product[]>([]);
+
     useEffect(() => {
-        // Пока таких эндпоинтов нет, просто возьмем первые несколько продуктов из первой категории
-        const fetchInitialProducts = async () => {
-            const products = await api.getProductsByCategoryId(1); // Предположим, что категория 1 - Роллы
-            setFeaturedProducts(products.slice(0, 4)); // Берем первые 4
+        const fetchPopularItems = async () => {
+            // Для примера возьмем товары из категории "Роллы" (ID 1)
+            try {
+                const products = await api.getProductsByCategoryId(1);
+                setPopularItems(products.slice(0, 4)); // Показываем только первые 4
+            } catch (error) {
+                console.error("Не удалось загрузить популярные товары:", error);
+            }
         };
-        fetchInitialProducts();
+        fetchPopularItems();
     }, []);
 
     return (
-        <div className="flex flex-col bg-white">
-            <img src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/S9Zqf2i8j3/rzizhdws_expires_30_days.png" className="w-full h-52 object-cover" alt="Sushi banner"/>
-            
-            <div className="p-4 -mt-8 relative z-10">
-                <div className="flex items-center bg-white shadow-md rounded-lg p-1">
-                    <div className="p-2"><FiSearch className="w-6 h-6 text-brand-green-light" /></div>
-                    <input
-                        placeholder="Search for dishes"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="flex-1 bg-transparent text-brand-green-light placeholder-brand-green-light focus:outline-none"
-                    />
+        <div className="bg-gray-50">
+            {/* --- Секция Hero --- */}
+            <div className="relative h-[60vh] md:h-[70vh] flex items-center justify-center text-white text-center">
+                <img 
+                    src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=1948&auto=format&fit=crop"
+                    className="absolute top-0 left-0 w-full h-full object-cover z-0"
+                    alt="Assorted sushi on a plate"
+                />
+                <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
+                <div className="relative z-20 p-4">
+                    <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">Вкусные суши с доставкой к вам</h1>
+<p className="mt-4 max-w-lg mx-auto">Закажите суши онлайн с доставкой или на вынос.</p>
+                    <button 
+                        onClick={() => navigate('/menu')}
+                        className="mt-8 bg-brand-orange text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform hover:scale-105"
+                    >
+                        Заказать
+                    </button>
                 </div>
             </div>
 
-            <div className="px-4 mt-4">
-                <h2 className="text-brand-dark text-2xl font-bold mb-4">Featured Items</h2>
-                <div className="flex gap-4 overflow-x-auto pb-4">
-                    {featuredProducts.map(product => (
-                         <div key={product.id} className="flex-shrink-0">
-                            <ProductCard product={{...product, image_url: `${api.baseURL}/${product.image_url}`}} />
-                        </div>
+            {/* --- Секция Popular Items --- */}
+            <div className="container mx-auto px-4 py-12">
+                <h2 className="text-3xl font-bold text-center text-brand-dark mb-8">Популярные позиции</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    {popularItems.map(product => (
+                        <ProductCard key={product.id} product={{...product, image_url: `/${product.image_url}`}} />
                     ))}
                 </div>
             </div>
-            
-            <div className="p-4 mt-auto">
-                <button 
-                  onClick={() => navigate('/menu')}
-                  className="w-full bg-brand-green text-white font-bold py-3 rounded-lg hover:bg-green-700 transition-colors">
-                    Order Now
-                </button>
-            </div>
+
+             {/* --- Секция About Us --- */}
+             <div className="text-center py-12 bg-white">
+                <h2 className="text-3xl font-bold text-brand-dark mb-4">About Us</h2>
+                <p className="max-w-2xl mx-auto text-gray-600">
+                    Мы готовим свежие, высококачественные суши из отборных ингредиентов. Наша любовь к настоящей японской кухне вдохновляет нас создавать незабываемые вкусовые впечатления — где бы вы ни находились: дома или в пути.
+                </p>
+             </div>
         </div>
     );
 };

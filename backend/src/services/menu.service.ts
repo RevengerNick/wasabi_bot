@@ -17,3 +17,22 @@ export const getProductsByCategoryId = async (categoryId: number) => {
         where: { category_id: categoryId },
     });
 };
+
+export const searchProducts = async (query: string) => {
+    return prisma.product.findMany({
+        where: {
+            OR: [
+                {
+                    name: {
+                        contains: query,
+                    },
+                },
+                {
+                    description: {
+                        contains: query,
+                    },
+                },
+            ],
+        },
+    });
+};

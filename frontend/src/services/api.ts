@@ -5,9 +5,12 @@ import { useUserStore } from '../store/userStore';
 import type { Category, Product, User} from '../types';
 
 
-export const baseURL = 'https://e8fc-92-119-248-95.ngrok-free.app'; // <-- ЭКСПОРТИРУЕМ ЭТУ КОНСТАНТУ
+export const baseURL = 'https://api.revenger.dev'; // <-- ЭКСПОРТИРУЕМ ЭТУ КОНСТАНТУ
 
-const apiClient = axios.create({ baseURL: `${baseURL}` });
+const apiClient = axios.create({ baseURL: `${baseURL}`,
+headers:{
+    "ngrok-skip-browser-warning": true
+}});
 // --- Функции для работы с API ---
 
 apiClient.interceptors.request.use((config) => {
@@ -113,5 +116,8 @@ export const getOrderHistory = async () => {
     const response = await apiClient.get('/orders/history');
     return response.data;
 };
-// TODO: Добавить функцию для аутентификации
-// export const loginUser = async (initData: string) => { ... }
+
+export const searchProducts = async (query: string): Promise<Product[]> => {
+    const response = await apiClient.get(`/search?q=${encodeURIComponent(query)}`);
+    return response.data;
+};

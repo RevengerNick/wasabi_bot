@@ -1,6 +1,6 @@
 // frontend/src/App.tsx
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useUserStore } from './store/userStore';
 import * as api from './services/api';
 import { useScreenSize } from './hooks/useScreenSize';
@@ -10,6 +10,10 @@ import SharedRoutes from './routes/SharedRoutes';
 import LoginPage from './pages/LoginPage';
 import { useCartStore } from './store/cartStore';
 import WebApp from '@twa-dev/sdk';
+import FullScreenLayout from './layouts/FullScreenLayout';
+import AddressSelectorPage from './pages/AddressSelectorPage';
+import ScrollToTop from './components/ScrollToTop';
+import ProductDetailModal from './components/ProductDetailModal';
 
 function App() {
     const { token } = useUserStore();
@@ -55,14 +59,27 @@ function App() {
 
     // Если пользователь вошел, показываем приложение
     return (
-        <Router>
-            {isDesktop ? (
-                <DesktopLayout><SharedRoutes /></DesktopLayout>
-            ) : (
-                <MobileLayout><SharedRoutes /></MobileLayout>
-            )}
-        </Router>
-    );
-}
+    <Router>
+        <ScrollToTop /> 
+      <Routes>
+        {/* Специальный роут для страницы с картой, который использует свой собственный layout */}
+        <Route path="/select-address" element={
+          <FullScreenLayout>
+            <AddressSelectorPage />
+          </FullScreenLayout>
+        } />
 
+        {/* Все остальные роуты используют стандартную логику с переключением layout'ов */}
+        <Route path="/*" element={
+          isDesktop ? (
+            <DesktopLayout><SharedRoutes /></DesktopLayout>
+          ) : (
+            <MobileLayout><SharedRoutes /></MobileLayout>
+          )
+        } />
+      </Routes>
+      <ProductDetailModal />
+    </Router>
+  );
+}
 export default App;

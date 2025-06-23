@@ -12,20 +12,20 @@ const BottomNav: React.FC = () => {
   ];
 
   // Стили для активной и неактивной ссылки
-  const activeStyle = { color: '#969696' };
+  const activeStyle = { color: '#d9d9d9' };
   const inactiveStyle = { color: '#ffffff' };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-green-900 shadow-t border-t border-gray-200 rounded-t-4xl">
-      <div className="flex justify-around items-start self-stretch pt-2 pb-1 px-4">
+    <div className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-green-800 shadow-t rounded-t-3xl z-30">
+      <div className="flex justify-around items-start self-stretch pt-2 px-2">
         {navItems.map(item => (
           <NavLink 
             key={item.to}
             to={item.to}
             style={({ isActive }) => isActive ? activeStyle : inactiveStyle}
            className={({ isActive }) =>
-    `flex flex-col items-center justify-center gap-1 w-1/4 rounded-2xl p-1 mx-1 transition-all duration-200 hover:bg-green-700 ${
-      isActive ? 'bg-green-800 text-white' : 'text-gray-400'
+    `flex flex-col items-center justify-center gap-1 w-1/4 rounded-t-3xl p-1 mx-1 transition-all duration-200 hover:bg-green-600 ${
+      isActive ? 'bg-green-700 text-white' : 'text-gray-200'
     }`
   }
   >

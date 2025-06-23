@@ -1,7 +1,7 @@
 // src/components/DesktopHeader.tsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FiSearch, FiShoppingCart } from 'react-icons/fi';
+import {  FiShoppingCart } from 'react-icons/fi';
 import { useCartStore } from '../store/cartStore';
 
 const DesktopHeader: React.FC = () => {
@@ -10,10 +10,10 @@ const DesktopHeader: React.FC = () => {
 
   // Ссылки для центральной навигации
   const navLinks = [
-    { to: '/menu', label: 'Menu' },
-    { to: '/reservations', label: 'Reservations' },
-    { to: '/about', label: 'About Us' },
-    { to: '/contact', label: 'Contact' },
+    { to: '/menu', label: 'Меню' },
+    { to: '/orders', label: 'История заказов' },
+    { to: '/about', label: 'О нас' },
+    { to: '/contact', label: 'Контакты' },
   ];
 
   return (
@@ -47,9 +47,7 @@ const DesktopHeader: React.FC = () => {
         </div>
 
         {/* === Правая часть: Иконки действий === */}
-        <div className="flex-1 flex justify-end items-center gap-6">
-          <FiSearch className="w-5 h-5 text-gray-600 hover:text-brand-dark cursor-pointer transition-colors" />
-          
+        <div className="flex-1 flex justify-end items-center gap-6">          
           <NavLink to="/cart" className="relative">
             <FiShoppingCart className="w-6 h-6 text-gray-600 hover:text-brand-dark transition-colors" />
             {/* Бейдж с количеством товаров. Появляется, только если в корзине что-то есть. */}
