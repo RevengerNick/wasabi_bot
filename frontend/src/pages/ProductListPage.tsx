@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import type { Product } from '../types';
 import * as api from '../services/api';
+import { useScreenSize } from '../hooks/useScreenSize';
+import DesktopProductListItem from '../components/DesktopProductListItem';
 import ProductListItem from '../components/ProductListItem'; // <-- Импортируем наш новый компонент
 
 const ProductListPage: React.FC = () => {
@@ -11,6 +13,7 @@ const ProductListPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const { isDesktop } = useScreenSize();
 
     useEffect(() => {
         if (!categoryId) return;
@@ -37,9 +40,10 @@ const ProductListPage: React.FC = () => {
                 {error && <p className="text-center text-red-500 py-10">{error}</p>}
 
                 <div className="flex flex-col gap-6">
-                    {/* Теперь мы просто мапим массив и рендерим один компонент */}
                     {!loading && !error && products.map(product => (
-                        <ProductListItem key={product.id} product={product} />
+                        isDesktop 
+                            ? <DesktopProductListItem key={product.id} product={product} />
+                            : <ProductListItem key={product.id} product={product} />
                     ))}
                 </div>
             </div>

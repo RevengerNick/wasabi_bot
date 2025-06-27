@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const imagesPath = path.join(__dirname, 'public/images');
+const imagesPath = path.join(__dirname, '../public/images');
 console.log('Статическая папка:', imagesPath);
 
 // Статическая раздача

@@ -12,16 +12,16 @@ const CartPage: React.FC = () => {
     const navigate = useNavigate();
 
 const handleCheckout = () => {
-        if (!user?.phone_number) {
-            // Если номера нет, отправляем на страницу его обновления/ввода
-            alert("Для оформления заказа необходимо указать номер телефона в профиле.");
-            navigate('/update-phone'); // Мы создадим эту страницу
+        // Проверяем, есть ли у пользователя номер телефона
+        if (user && !user.phone_number) {
+            alert("Для оформления заказа необходимо указать ваш номер телефона.");
+            // Если номера нет, отправляем на новую страницу для его ввода
+            navigate('/update-phone');
         } else {
-            // Если номер есть, переходим к оформлению
+            // Если номер есть, переходим к оформлению заказа
             navigate('/checkout');
         }
     };
-
     // Считаем общую стоимость корзины
     const totalCost = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 

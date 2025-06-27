@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useUserStore } from '../store/userStore';
-import type { Category, Product, User} from '../types';
+import type { Category, Product, User, Address } from '../types';
 
 
 export const baseURL = 'https://api.revenger.dev'; // <-- ЭКСПОРТИРУЕМ ЭТУ КОНСТАНТУ
@@ -62,14 +62,14 @@ export const loginViaPhone = async (phoneNumber: string, code: string) => {
     }
     return response;
 };
-export const updateUserPhone = async (phoneNumber: string): Promise<User> => {
-    // Отправляем запрос на бэкенд
-    const response = await apiClient.post<User>('/users/update-phone', { phoneNumber });
+
+export const updateUserPhone = async (phoneNumber: string): Promise<void> => {
+    const response = await apiClient.post<{ token: string; user: User }>('/users/update-phone', { phoneNumber });
     
-    // ПОСЛЕ успешного ответа, обновляем наше глобальное хранилище
-    useUserStore.getState().updateUser(response.data);
-    
-    return response.data;
+    const { token, user } = response.data;
+    // --- ГЛАВНОЕ ИЗМЕНЕНИЕ ---
+    // Мы полностью перезаписываем данные аутентификации новым токеном и пользователем
+    useUserStore.getState().setAuth({ token, user });
 };
 
 export const getCategories = async (): Promise<Category[]> => {
@@ -120,4 +120,31 @@ export const getOrderHistory = async () => {
 export const searchProducts = async (query: string): Promise<Product[]> => {
     const response = await apiClient.get(`/search?q=${encodeURIComponent(query)}`);
     return response.data;
+};
+
+// --- ФУНКЦИИ ДЛЯ РАБОТЫ С АДРЕСАМИ ---
+
+export const getAddresses = async (): Promise<Address[]> => {
+    const response = await apiClient.get('/address');
+    return response.data;
+};
+
+// Определяем тип для данных, которые мы отправляем
+interface NewAddressData {
+    name: string;
+    fullAddress: string;
+    latitude?: number;
+    longitude?: number;
+}
+
+// --- ИСПРАВЛЕННАЯ ФУНКЦИЯ ---
+// Теперь она принимает один объект `data`
+export const addAddress = async (data: NewAddressData): Promise<Address> => {
+    // И отправляет этот объект в теле POST-запроса
+    const response = await apiClient.post('/address', data);
+    return response.data;
+};
+
+export const deleteAddress = async (addressId: string): Promise<void> => {
+    await apiClient.delete(`/address/${addressId}`);
 };

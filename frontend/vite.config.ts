@@ -5,7 +5,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), visualizer({ open: true }), tailwindcss()],
+  plugins: [react(), visualizer({ open: false }), tailwindcss()],
   server: {
     allowedHosts: ["https://revenger.dev"]
   },

@@ -23,7 +23,9 @@ model User {
   username     String?
   created_at   DateTime @default(now())
 
-  orders Order[]
+  payment_methods PaymentMethod[]
+  addresses       Address[]
+  orders          Order[]
 }
 
 model Category {
@@ -87,4 +89,26 @@ model Promocode {
   discount_percent Float
   is_active        Boolean   @default(true)
   expires_at       DateTime?
+}
+
+model PaymentMethod {
+  id         String  @id @default(uuid())
+  type       String // e.g., "card", "cash"
+  details    String // e.g., "Карта **** 1234" or "Наличными курьеру"
+  is_default Boolean @default(false)
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Address {
+  id           String  @id @default(uuid())
+  name         String // e.g., "Дом", "Работа"
+  full_address String // Текстовый адрес
+  latitude     Float? // Широта (опционально)
+  longitude    Float? // Долгота (опционально)
+  is_default   Boolean @default(false)
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

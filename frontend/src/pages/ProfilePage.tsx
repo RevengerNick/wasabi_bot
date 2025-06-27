@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // <-- Добавляем Link
 import { 
-    FiCreditCard, FiMapPin, FiBell, FiList, 
+    FiCreditCard, FiMapPin, FiList, 
     FiInfo, FiMail, // <-- Новые иконки
     FiLogOut, FiTrash2 
 } from 'react-icons/fi';
@@ -44,9 +44,8 @@ const ProfilePage: React.FC = () => {
     }
 
     const accountItems = [
-        { icon: FiCreditCard, label: 'Способы оплаты' },
-        { icon: FiMapPin, label: 'Адреса' },
-        { icon: FiBell, label: 'Уведомления' },
+        { to: "/payment-methods", icon: FiCreditCard, label: 'Способы оплаты' },
+        { to: "/addresses", icon: FiMapPin, label: 'Мои адреса' }, // Заглушка
     ];
     
      const orderItems = [
@@ -81,7 +80,11 @@ const ProfilePage: React.FC = () => {
                 {/* --- СЕКЦИЯ АККАУНТ --- */}
                 <div>
                     <h3 className="text-lg font-bold text-brand-dark mb-2">Аккаунт</h3>
-                    {accountItems.map(item => <ProfileMenuItem key={item.label} icon={item.icon} label={item.label} />)}
+                    {accountItems.map(item => 
+                        <Link to={item.to} key={item.label}>
+                    <ProfileMenuItem icon={item.icon} label={item.label} />
+                </Link>
+                    )}
                 </div>
                 
                 {/* --- СЕКЦИЯ ЗАКАЗЫ --- */}

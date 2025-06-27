@@ -33,3 +33,12 @@ export interface User {
 export interface CartItem extends Product {
   quantity: number;
 }
+export interface Address {
+  id: string;
+  name: string;
+  full_address: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  is_default: boolean;
+  user_id: string;
+}

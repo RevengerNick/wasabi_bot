@@ -1,24 +1,18 @@
 // frontend/src/App.tsx
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { useUserStore } from './store/userStore';
-import * as api from './services/api';
-import { useScreenSize } from './hooks/useScreenSize';
-import DesktopLayout from './layouts/DesktopLayout';
-import MobileLayout from './layouts/MobileLayout';
-import SharedRoutes from './routes/SharedRoutes';
+import SharedRoutes from './routes/SharedRoutes'; // <-- Теперь здесь вся логика
 import LoginPage from './pages/LoginPage';
 import { useCartStore } from './store/cartStore';
 import WebApp from '@twa-dev/sdk';
-import FullScreenLayout from './layouts/FullScreenLayout';
-import AddressSelectorPage from './pages/AddressSelectorPage';
-import ScrollToTop from './components/ScrollToTop';
+import * as api from './services/api';
 import ProductDetailModal from './components/ProductDetailModal';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
     const { token } = useUserStore();
-    const { isDesktop } = useScreenSize();
-    const [isInitialized, setIsInitialized] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(true);
     const syncCart = useCartStore(state => state.syncWithDB);
 
     useEffect(() => {
@@ -59,27 +53,13 @@ function App() {
 
     // Если пользователь вошел, показываем приложение
     return (
-    <Router>
-        <ScrollToTop /> 
-      <Routes>
-        {/* Специальный роут для страницы с картой, который использует свой собственный layout */}
-        <Route path="/select-address" element={
-          <FullScreenLayout>
-            <AddressSelectorPage />
-          </FullScreenLayout>
-        } />
-
-        {/* Все остальные роуты используют стандартную логику с переключением layout'ов */}
-        <Route path="/*" element={
-          isDesktop ? (
-            <DesktopLayout><SharedRoutes /></DesktopLayout>
-          ) : (
-            <MobileLayout><SharedRoutes /></MobileLayout>
-          )
-        } />
-      </Routes>
-      <ProductDetailModal />
-    </Router>
-  );
+         <>
+            <Router>
+                <ScrollToTop />
+                <SharedRoutes />
+            </Router>
+            <ProductDetailModal />
+        </>
+    );
 }
 export default App;

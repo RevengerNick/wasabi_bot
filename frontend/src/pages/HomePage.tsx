@@ -13,7 +13,7 @@ const HomePage: React.FC = () => {
         const fetchPopularItems = async () => {
             // Для примера возьмем товары из категории "Роллы" (ID 1)
             try {
-                const products = await api.getProductsByCategoryId(1);
+                const products = await api.getProductsByCategoryId(6);
                 setPopularItems(products.slice(0, 4)); // Показываем только первые 4
             } catch (error) {
                 console.error("Не удалось загрузить популярные товары:", error);
@@ -25,12 +25,19 @@ const HomePage: React.FC = () => {
     return (
         <div className="bg-gray-50">
             {/* --- Секция Hero --- */}
-            <div className="relative h-[60vh] md:h-[70vh] flex items-center justify-center text-white text-center">
+            <div className="relative h-[60vh] md:h-[70vh] flex items-center justify-center text-white text-center ">
                 <img 
-                    src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=1948&auto=format&fit=crop"
-                    className="absolute top-0 left-0 w-full h-full object-cover z-0"
-                    alt="Assorted sushi on a plate"
-                />
+    src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=1948&auto=format&fit=crop"
+    className="absolute top-0 left-0 w-full h-full object-cover z-0 scale-120 opacity-10"
+    alt="Background blur sushi"
+  />
+
+  {/* Основная картинка */}
+  <img 
+    src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=1948&auto=format&fit=crop"
+    className="absolute top-0 left-0 w-full h-full object-cover z-10"
+    alt="Assorted sushi on a plate"
+  />
                 <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
                 <div className="relative z-20 p-4">
                     <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">Вкусные суши с доставкой к вам</h1>
@@ -45,11 +52,11 @@ const HomePage: React.FC = () => {
             </div>
 
             {/* --- Секция Popular Items --- */}
-            <div className="container mx-auto px-4 py-12">
+            <div className="px-4 py-12">
                 <h2 className="text-3xl font-bold text-center text-brand-dark mb-8">Популярные позиции</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                     {popularItems.map(product => (
-                        <ProductCard key={product.id} product={{...product, image_url: `/${product.image_url}`}} />
+                        <ProductCard key={product.id} product={product} />
                     ))}
                 </div>
             </div>

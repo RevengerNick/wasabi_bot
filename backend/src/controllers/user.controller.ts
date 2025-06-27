@@ -1,22 +1,30 @@
-// backend/src/controllers/user.controller.ts
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { User } from '@prisma/client';
 import * as userService from '../services/user.service';
 
-// Express не передает типы в req.user по умолчанию, мы должны расширить их
-// Создайте файл @types/express/index.d.ts в корне проекта backend и добавьте в него:
-// declare namespace Express { export interface Request { user?: { id: number; telegram_id: string; }; } }
+// Копируем эту функцию сюда для использования
+const generateTokenAndRespond = (res: Response, user: User) => {
+    const payload = { id: user.id };
+    const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '7d' });
+    res.status(200).json({ token, user });
+};
+
 export const updatePhone = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { phoneNumber } = req.body;
-        const userId = req.user?.id; // Получаем ID пользователя из JWT токена
+        // req.user теперь содержит ПОЛНОГО пользователя благодаря middleware
+        const userId = req.user?.id;
 
         if (!userId || !phoneNumber) {
             res.status(400).json({ message: 'Отсутствует ID пользователя или номер телефона' });
             return;
         }
 
-        const updatedUser = await userService.updateUserPhone(userId, phoneNumber);
-        res.status(200).json(updatedUser);
+        const updatedUser = await userService.mergeOrUpdateUser(userId, phoneNumber);
+        
+        // Генерируем новый токен с обновленными данными
+        generateTokenAndRespond(res, updatedUser);
     } catch (error) {
         next(error);
     }
@@ -34,10 +42,4 @@ export const deleteCurrentUser = async (req: Request, res: Response, next: NextF
     } catch (error) {
         next(error);
     }
-};
-
-export const sendData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    console.log(req.body)
-    res.status(200).json({ message: 'OK' });
-    return;
 };

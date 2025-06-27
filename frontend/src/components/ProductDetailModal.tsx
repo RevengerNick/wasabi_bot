@@ -10,7 +10,7 @@ const ProductDetailModal: React.FC = () => {
 
     if (!selectedProduct) return null;
     
-    const fullImageUrl = `https://api.revenger.dev${selectedProduct.image_url}`;
+    const fullImageUrl = `https://api.revenger.dev/${selectedProduct.image_url}`;
 
     return (
         <AnimatePresence>
@@ -33,7 +33,7 @@ const ProductDetailModal: React.FC = () => {
                             <FiX size={24} />
                         </button>
                         
-                        <img src={fullImageUrl} alt={selectedProduct.name} className="w-full h-64 object-cover rounded-t-2xl" />
+                        <img src={fullImageUrl} alt={selectedProduct.name} className="w-full max-h-100 object-cover rounded-t-2xl" />
                         
                         <div className="p-6">
                             <h2 className="text-3xl font-bold text-brand-dark">{selectedProduct.name}</h2>

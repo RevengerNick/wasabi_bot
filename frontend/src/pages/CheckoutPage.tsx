@@ -1,83 +1,116 @@
 // frontend/src/pages/CheckoutPage.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { useCartStore } from '../store/cartStore';
 import { useUserStore } from '../store/userStore';
-import { useNavigate } from 'react-router-dom';
+import { useAddressStore } from '../store/addressStore';
+import { useCheckoutStore } from '../store/checkoutStore'; // Импортируем наш стор для адреса с карты
 import * as api from '../services/api';
-import { Link } from 'react-router-dom';
-import { useCheckoutStore } from '../store/checkoutStore';
+import { FiMapPin } from 'react-icons/fi';
 
 const CheckoutPage: React.FC = () => {
-    const { items, clearCart } = useCartStore();
     const user = useUserStore((state) => state.user);
-    // --- ГЛАВНОЕ ИСПРАВЛЕНИЕ ---
-    // Получаем выбранный адрес из нашего нового хранилища
-    const selectedAddress = useCheckoutStore((state) => state.selectedAddress);
+    const { clearCart } = useCartStore();
+    const { addresses, fetchAddresses } = useAddressStore();
+    
+    // Получаем адрес, выбранный на карте, и функцию его очистки
+    const { selectedAddress: addressFromMap, clearAddress } = useCheckoutStore();
+
+    // Локальное состояние для выбора адреса
+    const [deliveryAddress, setDeliveryAddress] = useState('');
     
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    const totalCost = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    useEffect(() => {
+        fetchAddresses();
+    }, [fetchAddresses]);
+
+    // --- ГЛАВНАЯ ЛОГИКА ---
+    // Если мы вернулись со страницы карты, используем этот адрес
+    useEffect(() => {
+        if (addressFromMap) {
+            setDeliveryAddress(addressFromMap);
+        }
+    }, [addressFromMap]);
+
+    //const totalCost = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
     const handleCreateOrder = async () => {
-        // Теперь проверяем, что адрес был выбран
-        if (!selectedAddress) {
-            alert('Пожалуйста, выберите адрес доставки на карте');
+        if (!deliveryAddress) {
+            alert('Пожалуйста, выберите или укажите адрес доставки');
             return;
         }
         setLoading(true);
         try {
-            const newOrder = await api.createOrder({ address: selectedAddress, contactPhone: user!.phone_number! });
+            const newOrder = await api.createOrder({ 
+                address: deliveryAddress, 
+                contactPhone: user!.phone_number! 
+            });
             alert(`Ваш заказ №${newOrder.public_id} успешно создан!`);
             clearCart();
-            // TODO: Очистить и выбранный адрес
-            // useCheckoutStore.getState().clearAddress();
-            navigate('/orders'); // Перенаправляем на историю заказов
+            clearAddress(); // Очищаем адрес с карты после успешного заказа
+            navigate('/orders');
         } catch (error) {
             alert('Не удалось создать заказ.');
-            console.error(error);
         } finally {
             setLoading(false);
         }
     };
+
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
             <Header title="Оформление заказа" showBackButton={true} />
             <div className="p-4 space-y-6">
-                {/* Секция "Состав заказа" */}
-                <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <h3 className="text-lg font-bold mb-2">Ваш заказ</h3>
-                    {items.map(item => (
-                        <div key={item.id} className="flex justify-between items-center text-sm py-1">
-                            <span>{item.name} x {item.quantity}</span>
-                            <span className="font-semibold">{(item.price * item.quantity).toLocaleString()} сум</span>
-                        </div>
-                    ))}
-                    <div className="flex justify-between items-center text-lg font-bold mt-2 pt-2 border-t">
-                        <span>Итого:</span>
-                        <span>{totalCost.toLocaleString()} сум</span>
-                    </div>
-                </div>
+                {/* ... (Секция "Состав заказа") ... */}
 
-                {/* Секция "Данные доставки" */}
                 <div className="bg-white p-4 rounded-lg shadow-sm">
                     <h3 className="text-lg font-bold mb-2">Данные для доставки</h3>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Номер телефона</label>
-                        <input type="text" readOnly value={user?.phone_number || ''} className="w-full mt-1 p-2 bg-gray-100 rounded-md" />
-                    </div>
+                    {/* ... (Поле с номером телефона) ... */}
+                    
                     <div className="mt-4">
                         <label className="block text-sm font-medium text-gray-700">Адрес доставки</label>
-                        <Link to="/select-address" className="block w-full mt-1 p-3 border rounded-md text-left bg-white hover:bg-gray-50">
-                          <p className={`font-semibold ${selectedAddress ? 'text-brand-dark' : 'text-gray-400'}`}>
-                              {selectedAddress || 'Нажмите, чтобы выбрать адрес на карте'}
-                          </p>
+                        <p className="text-xs text-gray-500 mb-2">Выберите сохраненный адрес или укажите на карте.</p>
+
+                        <select 
+                            value={deliveryAddress} 
+                            onChange={e => setDeliveryAddress(e.target.value)}
+                            className="w-full mt-1 p-3 border border-gray-300 rounded-md bg-white"
+                        >
+                            <option value="" disabled>Выберите из сохраненных...</option>
+                            {addresses.map(addr => (
+                                <option key={addr.id} value={addr.full_address}>
+                                    {addr.full_address}
+                                </option>
+                            ))}
+                        </select>
+                        <Link to="/addresses" className="text-sm text-blue-600 hover:underline mt-1 inline-block">
+                            Управлять текстовыми адресами
                         </Link>
+                    </div>
+
+                    <div className="flex items-center my-4">
+                        <div className="flex-grow border-t border-gray-200"></div>
+                        <span className="flex-shrink mx-4 text-gray-400 text-sm">ИЛИ</span>
+                        <div className="flex-grow border-t border-gray-200"></div>
+                    </div>
+
+                    <Link to="/select-address">
+                        <button className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed rounded-lg text-brand-green hover:bg-green-50">
+                            <FiMapPin /> Выбрать точный адрес на карте
+                        </button>
+                    </Link>
+                    
+                    {/* Показываем выбранный адрес, если он был выбран на карте */}
+                    {addressFromMap && (
+                        <div className="mt-3 p-2 bg-blue-50 border border-blue-200 rounded-md text-sm">
+                            <span className="font-semibold">Адрес с карты:</span> {addressFromMap}
                         </div>
+                    )}
                 </div>
 
-                <button onClick={handleCreateOrder} disabled={loading} className="w-full bg-brand-green text-white font-bold py-3 rounded-lg">
+                <button onClick={handleCreateOrder} disabled={loading || !deliveryAddress} className="w-full bg-brand-green text-white font-bold py-3 rounded-lg disabled:bg-gray-400">
                     {loading ? 'Обработка...' : 'Заказать'}
                 </button>
             </div>

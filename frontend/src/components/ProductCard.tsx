@@ -2,7 +2,6 @@
 import React from 'react';
 import type { Product } from '../types';
 import { useModalStore } from '../store/modalStore';
-import { baseURL } from '../services/api'; // <-- Импортируем baseURL
 
 interface ProductCardProps {
     product: Product;
@@ -10,24 +9,23 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const openProductModal = useModalStore((state) => state.openProductModal);
-    
-    // --- ГЛАВНОЕ ИСПРАВЛЕНИЕ ---
-    // Строим полный, абсолютный URL для изображения
-    const fullImageUrl = `${baseURL}${product.image_url}`;
+    // Наш API теперь не добавляет baseURL, поэтому строим его здесь
+    const fullImageUrl = `https://api.revenger.dev/${product.image_url}`;
 
     return (
+        // --- ГЛАВНОЕ ИЗМЕНЕНИЕ: Убираем w-40 и shrink-0 ---
         <div 
             onClick={() => openProductModal(product)} 
-            className="flex flex-col w-40 shrink-0 text-center cursor-pointer group"
+            className="flex flex-col text-center cursor-pointer group"
         >
+            {/* Картинка теперь будет квадратной благодаря aspect-square */}
             <img 
-                src={fullImageUrl} // <-- Используем полный URL
+                src={fullImageUrl}
                 alt={product.name}
-                className="w-40 h-40 rounded-lg object-cover mb-4 transition-transform group-hover:scale-105" 
+                className="w-full aspect-square rounded-lg object-cover mb-3 transition-transform group-hover:scale-105" 
             />
             <div className="flex flex-col items-center">
                 <span className="text-brand-dark text-base font-bold">{product.name}</span>
-                {/* Заменяем описание на цену для более чистого вида */}
                 <span className="text-brand-green-light text-sm font-semibold mt-1">
                     {product.price.toLocaleString('ru-RU')} сум
                 </span>
