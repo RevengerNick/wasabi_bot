@@ -4,10 +4,12 @@ on:
     branches: ["master"]
     paths:
       - "backend/**"
+      - ".github/**"
   pull_request:
     branches: ["master"]
     paths:
       - "backend/**"
+      - ".github/**"
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -42,7 +44,8 @@ jobs:
         run: npx prisma migrate deploy
         env:
           DATABASE_URL: "mysql://testuser:testpassword@127.0.0.1:3306/wasabi_test"
-
+      - name: Seed db
+        run: npx prisma db seed
       - name: Run tests
         run: npm run test
         env:
