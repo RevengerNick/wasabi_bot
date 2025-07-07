@@ -2,11 +2,18 @@ name: CI - Build and Test
 on:
   push:
     branches: ["master"]
+    paths:
+      - "backend/**"
   pull_request:
     branches: ["master"]
+    paths:
+      - "backend/**"
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     services:
       mysql-db:
         image: mysql:8.0
