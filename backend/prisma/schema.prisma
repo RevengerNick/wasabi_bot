@@ -17,7 +17,7 @@ model User {
   // Меняем Int на String, @id на @default(uuid())
   id String @id @default(uuid())
 
-  telegram_id  BigInt?  @unique
+  telegram_id  String?  @unique
   phone_number String?  @unique
   first_name   String?
   username     String?
@@ -53,7 +53,7 @@ model Order {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(cuid())
   user_id   String
-  user      User   @relation(fields: [user_id], references: [id])
+  user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   status      String @default("new") // new, confirmed, in_delivery, completed, canceled
   total_price Float
@@ -72,7 +72,7 @@ model Order {
 model OrderItem {
   id       Int   @id @default(autoincrement())
   order_id Int
-  order    Order @relation(fields: [order_id], references: [id])
+  order    Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
 
   product_id Int
   product    Product @relation(fields: [product_id], references: [id])

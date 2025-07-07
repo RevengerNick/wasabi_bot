@@ -9,11 +9,11 @@ const prisma = new PrismaClient();
 export const findOrCreateUserByTelegram = async (telegramUser: any): Promise<User> => {
     // --- ГЛАВНОЕ ИСПРАВЛЕНИЕ ---
     // Явно преобразуем ID в BigInt перед использованием
-    const telegramIdAsBigInt = BigInt(telegramUser.id);
+    const telegramIdAsString = String(telegramUser.id);
 
     // Сначала ищем пользователя
     const existingUser = await prisma.user.findUnique({
-        where: { telegram_id: telegramIdAsBigInt }
+        where: { telegram_id: telegramIdAsString }
     });
 
     if (existingUser) {
@@ -30,7 +30,7 @@ export const findOrCreateUserByTelegram = async (telegramUser: any): Promise<Use
     // Если не нашли - создаем
     return prisma.user.create({
         data: {
-            telegram_id: telegramIdAsBigInt,
+            telegram_id: telegramIdAsString,
             first_name: telegramUser.first_name,
             username: telegramUser.username,
         },

@@ -8,9 +8,9 @@ import { User } from '@prisma/client';
 // Универсальная функция для генерации токена и ответа
 const generateTokenAndRespond = (res: Response, user: User) => {
     // --- ИСПРАВЛЕНИЕ: Убираем token_version ---
-    const payload = {
-        id: user.id,
-    };
+    const payload: any = { id: user.id };
+    
+    if (user.telegram_id) payload.telegram_id = user.telegram_id;
     
     const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '7d' });
     
