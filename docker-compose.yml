@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # --- База данных ---
+  db:
+    image: mariadb:10.6 # Официальный образ, поддерживает ARM64
+    container_name: mariadb_wasabi
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${DB_NAME}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  # --- Бэкенд для суши ---
+  wasabi-backend:
+    container_name: wasabi_backend
+    build:
+      context: ./wasabi_bot/backend
+    restart: always
+    environment:
+      DATABASE_URL: "mysql://root:${DB_ROOT_PASSWORD}@db:3306/${DB_NAME}"
+      # ... (добавьте сюда другие переменные, например JWT_SECRET, BOT_TOKEN)
+    depends_on:
+      - db
+
+  # --- Фронтенд для суши ---
+  wasabi-frontend:
+    container_name: wasabi_frontend
+    build:
+      context: ./wasabi_bot/frontend
+    restart: always
+    environment:
+      VITE_GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API}
+    depends_on:
+      - wasabi-backend
+
+  # --- Telegram-бот ---
+  wasabi-bot:
+    container_name: wasabi_bot
+    build:
+      context: ./wasabi_bot/bot
+    restart: always
+    environment:
+        BOT_TOKEN: ${BOT_TOKEN}
+        FRONT_URL: ${FRONT_URL}
+      # ... (переменные для бота)
+
+  # --- Cloudflare Tunnel ---
+  cloudflared:
+    image: cloudflare/cloudflared:latest # Официальный образ
+    container_name: cloudflare_tunnel
+    restart: always
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - wasabi-backend
+      - wasabi-frontend
+      - portfolio-frontend
+
+volumes:
+  mariadb_data:
