@@ -55,7 +55,6 @@ services:
     depends_on:
       - wasabi-backend
       - wasabi-frontend
-      - portfolio-frontend
 
 volumes:
   mariadb_data:
