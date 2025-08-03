@@ -16,7 +16,7 @@ services:
   wasabi-backend:
     container_name: wasabi_backend
     build:
-      context: ./wasabi_bot/backend
+      context: ./backend
     restart: always
     environment:
       DATABASE_URL: "mysql://root:${DB_ROOT_PASSWORD}@db:3306/${DB_NAME}"
@@ -28,7 +28,7 @@ services:
   wasabi-frontend:
     container_name: wasabi_frontend
     build:
-      context: ./wasabi_bot/frontend
+      context: ./frontend
     restart: always
     environment:
       VITE_GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API}
@@ -39,14 +39,14 @@ services:
   wasabi-bot:
     container_name: wasabi_bot
     build:
-      context: ./wasabi_bot/bot
+      context: ./bot
     restart: always
     environment:
-        BOT_TOKEN: ${BOT_TOKEN}
-        FRONT_URL: ${FRONT_URL}
-      # ... (переменные для бота)
+      BOT_TOKEN: ${BOT_TOKEN}
+      FRONT_URL: ${FRONT_URL}
+    # ... (переменные для бота)
 
-  # --- Cloudflare Tunnel ---
+    # --- Cloudflare Tunnel ---
   cloudflared:
     image: cloudflare/cloudflared:latest # Официальный образ
     container_name: cloudflare_tunnel
