@@ -14,6 +14,6 @@ COPY . .
 
 # Генерируем Prisma Client
 RUN npx prisma generate
-
+RUN npm run build
 # Запускаем миграции при старте
 CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
